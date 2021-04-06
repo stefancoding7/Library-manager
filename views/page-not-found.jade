@@ -1,0 +1,7 @@
+extends layout
+
+block content
+  h1= error.message
+  p Sorry! We couldn't find the page you were looking for.
+  h2= error.status
+  a.button(href="/books") Home

@@ -9,6 +9,10 @@ var usersRouter = require('./routes/users');
 
 var app = express();
 
+
+//import sequelize
+const sequelize = require('./models').sequelize;
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
@@ -22,10 +26,28 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
+
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-  next(createError(404));
+  const error = new Error();
+  error.status = 404;
+  error.message = 'Page not found.';
+  res.render('page-not-found', { error })
+ // next(createError(404));
 });
+
+
+// catch 500 error and forward to error handler
+ app.use(function(err, req, res, next) {
+   if(!err.status === 404) {
+    err.status = 500;
+    err.message = 'Sorry something went wrong.';   
+    console.log(`Error status: ${err.status} | Error message: ${err.message}`);
+    res.render('error', { err });
+  }
+
+ })
 
 // error handler
 app.use(function(err, req, res, next) {
@@ -33,9 +55,21 @@ app.use(function(err, req, res, next) {
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
-  // render the error page
-  res.status(err.status || 500);
-  res.render('error');
+  // // render the error page
+  // res.status(err.status || 500);
+  // res.render('error');
 });
+
+(async () => {
+      try {
+          await sequelize.authenticate();
+          console.log('Connection to the database successful!');
+  
+      } catch (error) {
+          console.error('Error connecting to the database: ', error);
+  
+      }
+    
+  })();
 
 module.exports = app;
