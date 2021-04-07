@@ -1,6 +1,7 @@
 body {
   padding: 10px 50px 50px;
   font: 18px "Garamond", serif;
+  font-family: 'Nunito', sans-serif;
 }
 
 a {
@@ -17,10 +18,10 @@ a {
 a.button, input[type=submit] {
   color: white;
   background: #019875;
-  font-family: "Lucida Grande", Helvetica, Arial, sans-serif;
+  
   padding: 10px 14px 12px;
   font-size: 14px;
-  border-radius: 2px;
+  border-radius: 20px;
   cursor: pointer;
 }
 
@@ -35,6 +36,7 @@ input[type=submit] {
 
   a.button:hover, input[type=submit]:hover {
     background-color: #01b189;
+    
   }
 
 p {
@@ -94,4 +96,21 @@ input[type=text] {
 
 .error {
   color: rgb(236, 15, 15);
+}
+
+input[type=text]{
+  -webkit-border-radius: 20px;
+  -moz-border-radius: 20px;
+   border-radius: 20px;
+   border: 1px solid #01b189;
+   color: #a0d18c;
+   width: 250px;
+   
+   padding-left: 10px;
+  }
+  
+input[type=text]:focus {
+   outline: none;
+   border: 1px solid #a0d18c;
+   color: #01b189;
 }
