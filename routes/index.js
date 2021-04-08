@@ -63,14 +63,35 @@ router.post('/books/new-book', asyncHandler(async (req, res) => {
 /* Show book detail form */
 router.get('/books/:id', asyncHandler(async (req, res) => {
   const book = await Book.findByPk(req.params.id)
-  res.render('update-book', { book });
+  if(book) {
+    res.render('update-book', { book });
+  } else {
+    const error = new Error();
+    error.status = 404;
+    error.message = 'Page not found.';
+    res.render('page-not-found', { error })
+  }
+  
 }));
 
 /* POST update book */
 router.post('/books/:id', asyncHandler(async (req, res) => {
-  const bookc = await Book.findByPk(req.params.id);
-  await bookc.update(req.body);
-  res.redirect("/books");
+  let book = await Book.findByPk(req.params.id);
+  
+  try {
+    book = await book.update(req.body);
+    res.redirect('/books');
+  } catch (error) {
+   
+    if(error.name === "SequelizeValidationError") { // checking the error
+      
+      res.render("update-book", { book, errors: error.errors, check: req.body})
+    } else {
+      throw error; // error caught in the asyncHandler's catch block
+    }  
+  }
+  // await book.update(req.body);
+  // res.redirect("/books");
 }));
 
 /*DELETE book from DB */
