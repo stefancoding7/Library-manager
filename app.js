@@ -30,20 +30,23 @@ app.use('/', indexRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-  const error = new Error();
-  error.status = 404;
-  error.message = 'Page not found.';
-  res.render('page-not-found', { error })
- 
+  const err = new Error();
+  err.status = 404;
+  err.message = 'Page not found.';
+  // res.render('page-not-found', { error })
+  next(err);
 });
 
 
 // catch 500 error and forward to error handler
  app.use(function(err, req, res, next) {
-   if(!err.status === 404) {
+   if(err.status === 404) {
+     res.locals.error = err;
+     res.render('page-not-found')
+  } else if (!err.status === 404) {
     err.status = 500;
     err.message = 'Sorry something went wrong.';   
-    console.log(`Error status: ${err.status} | Error message: ${err.message}`);
+    res.locals.error = err;
     res.render('error', { err });
   }
 

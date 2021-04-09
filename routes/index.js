@@ -61,15 +61,15 @@ router.post('/books/new-book', asyncHandler(async (req, res) => {
 }));
 
 /* Show book detail form */
-router.get('/books/:id', asyncHandler(async (req, res) => {
+router.get('/books/:id', asyncHandler(async (req, res, next) => {
   const book = await Book.findByPk(req.params.id)
   if(book) {
     res.render('update-book', { book });
   } else {
-    const error = new Error();
-    error.status = 404;
-    error.message = 'Page not found.';
-    res.render('page-not-found', { error })
+    const err = new Error();
+    err.status = 404;
+    err.message = 'Page not found.';
+    next(err)
   }
   
 }));
